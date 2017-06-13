@@ -3,7 +3,7 @@
 #include<string>
 #include<iostream>
 
-const int ARRAY_SIZE = 7;
+const int ARRAY_SIZE = 26;
 
 
 int getMenuInput(int size)
