@@ -38,7 +38,7 @@ private:
 	int hash(T data) // Temporary hash/key function
 	{
 		int number;
-		number = static_cast<int>(*data);
+		number = static_cast<int>(*data); // this converts the pokemon class pointer into an int based on the serial number of the pokemon pointer
 		number = (number - 1);
 		return number;
 		//return (((data * data) + 1) % arrayLength);
