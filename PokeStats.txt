@@ -1,0 +1,9 @@
+13|Weedle|Bug, Poison|19|55
+1|Bulbasaur|Grass, Poison|31|18
+4|Charmander|Fire|30|90
+10|Caterpie|Bug|19|65
+9|Blastoise|Water|53|20
+26|Magikarp|Water|20|50
+18|Pidgeot|Normal, Flying|46|39
+10|Caterpie|Bug|19|65
+10|Caterpie|Bug|19|65
