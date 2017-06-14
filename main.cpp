@@ -196,6 +196,7 @@ int main()
 			// cout the binary tree horizontally, alex and hammud will collaborate as needed on this
 			//system("cls");
 			cout << "this is the printed indented tree choice\n";
+			cout << pokemonBST.findDepth();
 			choice = 9;
 			break;
 		}
