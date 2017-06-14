@@ -8,6 +8,7 @@ bool searchForValue(T value)								- find node in tree
 void searchAndModify(T findThis)							- find and replace node value in tree *will change tree structure*
 bool deleteValue(T value)									- delete node from tree *will change tree structure*
 void addValue(T value)										- add node to tree *if data values are the same, the root will be saved to the left*
+int findDepth(){						- return an integer containing the depth
 */
 
 #ifndef BINARYSEARCHTREE_H
@@ -153,7 +154,7 @@ protected:
 		// else, the sub-tree has two branches
 		else
 		{
-			// Find the inorder successor of the entry in N: it is in the left subtree rooted at N’s right child
+			// Find the inorder successor of the entry in N: it is in the left subtree rooted at Nâ€™s right child
 			tempPtr = removeLeftMostNode(currentNode->rightBranch, currentNode->data);  // data is referenced in removeleftnode function
 			currentNode->rightBranch = tempPtr;
 			currentNode->data = currentNode->data;  // because the data was referenced, it was changed
@@ -226,6 +227,21 @@ protected:
 			post_orderTraversal(currentRoot->rightBranch, writeFile); // check the right branch for a valid path
 			writeFile << currentRoot->data << std::endl; // when both branches are nullptr's, print out the current node's data
 		}
+	}
+	
+	//this is the recursive function called when calculating the depth of tree
+	int findDepth(DualLinkDataNode<T> *currentRoot, int level){
+		// if the currentRoot is null, that means this branch's patch is at the end
+		int templevel1; 
+		int templevel2;
+		if (currentRoot == nullptr) return level;
+		level++;
+		templevel1 = findDepth(currentRoot->leftBranch, level); // check the left branch for a valid path
+		templevel2 = findDepth(currentRoot->rightBranch, level); // check the right branch for a valid path
+		if (templevel1 > templevel2)
+			templevel2 = templevel1;
+		level = templevel2;
+		return level;
 	}
 
 	//  Use a post order traverse to get to the bottom of the tree,
@@ -471,6 +487,18 @@ public:
 		else
 		{
 			//post_orderTraversal(rootNode, writeFile);
+		}
+	}
+	
+	//public function which can be called in main to return an integer containning the depth
+	int findDepth(){
+		int level = 0;
+		if (!rootNode){
+			return level;
+		}
+		else
+		{
+			findDepth(rootNode, level);
 		}
 	}
 };
