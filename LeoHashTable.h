@@ -12,6 +12,7 @@ This is status report #3. I'd say im about 95% complete with the hash table.
 Explaining y 95%
 Reason is: Everything is working fluidly with POKEMON POINTERS now. I mean EVERYTHING.
 The only thing I havn't done yet is make a Linked-List collision solution (currently linear probing).
+I also have to update my remove/search to compare Number, Name, and Type instead of just Number. (lazy right now).
 I'm going to be busy Thursday and Friday, so I thought "Why not put this up now so that everyone knows I'm up to date".
 Yea, once I finish all the work i have to do, Ill make a Linked List collision solution and documentation. That will
 make it 100% done for me.
