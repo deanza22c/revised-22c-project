@@ -501,6 +501,29 @@ public:
 			findDepth(rootNode, level);
 		}
 	}
+	//Untested Indent Print I need to test if I incremented correnctly as well as view the out put. Will resume at ~7PM 6/15
+	void printIndented(DualLinkDataNode<T>*start)
+	{
+	//Get Number of tabs to print
+		static int indenter = findDepth();
+	//Verify not null
+		if (start != nullptr)
+		{
+			//Call function on itself till we get to rightmost branch
+			printIndented(start->rightBranch);
+			//Print out number of tabs corresponding to depth, I may change this by creating a different depth function that returns depth of an individual node
+			for (int x = 0; x < indenter;x++)
+			{
+				std::cout << "/t";
+			}
+			//Print out data (Verify ostream operator in Pokemon class to make sure out puts work)
+			std::cout << start->data << std::endl;
+			//Call function on left branch and repeat
+			printIndented(start->leftBranch);
+			//Decrease indents for previous level
+			indenter--;
+		}
+	}
 };
 
 #endif
