@@ -501,18 +501,50 @@ public:
 			findDepth(rootNode, level);
 		}
 	}
-	//Untested Indent Print I need to test if I incremented correnctly as well as view the out put. Will resume at ~7PM 6/15
+	//function that uses comparison of data to find the depth of an item in the tree
+	int getHeight(DualLinkDataNode<T>*find)
+	{
+		//Validate that pointer is not null and exists in tree;
+		if (find == nullptr || searchforData(find->data)==false)
+		{
+			return -1;
+		}
+		else
+		{
+		//Create return counter
+			int result=0;
+		//Create poiner to iterate with
+			DualLinkDataNode<T>* iter = rootNode;
+		//Iterate till data is matched
+			while (iter->data != find->data)
+			{
+		//Based on comparisons determine which branch to follow
+				if (find->data > iter->data)
+				{
+					iter = iter->right;
+				}
+				else 
+				{
+					iter = iter->left;
+				}
+		//Increment depth counter
+				result++;
+			}
+		//Return value
+			return result;
+		}
+	}
+	
+	//Untested Indent Print I need to test if I incremented correnctly as well as view the output.
 	void printIndented(DualLinkDataNode<T>*start)
 	{
-	//Get Number of tabs to print
-		static int indenter = findDepth();
 	//Verify not null
 		if (start != nullptr)
 		{
 			//Call function on itself till we get to rightmost branch
 			printIndented(start->rightBranch);
 			//Print out number of tabs corresponding to depth, I may change this by creating a different depth function that returns depth of an individual node
-			for (int x = 0; x < indenter;x++)
+			for (int x = 0; x <getHeight(start);x++)
 			{
 				std::cout << "/t";
 			}
