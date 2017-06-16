@@ -543,17 +543,16 @@ public:
 		{
 			//Call function on itself till we get to rightmost branch
 			printIndented(start->rightBranch);
-			//Print out number of tabs corresponding to depth, I may change this by creating a different depth function that returns depth of an individual node
+			//Print out number of tabs corresponding to depth of the object
+			//(May change it so it prints out an arrow if we have time)
 			for (int x = 0; x <getHeight(start);x++)
 			{
 				std::cout << "/t";
 			}
 			//Print out data (Verify ostream operator in Pokemon class to make sure out puts work)
 			std::cout << start->data << std::endl;
-			//Call function on left branch and repeat
+			//Call function on left branch till tree is completed
 			printIndented(start->leftBranch);
-			//Decrease indents for previous level
-			indenter--;
 		}
 	}
 };
