@@ -20,7 +20,7 @@
 20|Raticate|Norma|41|63
 21|Spearow|Normal, Flying|26|42
 22|Fearow|Normal, Flying|44|72
-23|Ekans|Poison||28|83
+23|Ekans|Poison|28|83
 24|Arbok|Poison|43|48
 25|Pikachu|Electric|30|30
 26|Magikarp|Water|20|50
