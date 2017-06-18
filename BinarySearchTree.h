@@ -521,14 +521,16 @@ public:
 		//Based on comparisons determine which branch to follow
 				if (find->data > iter->data)
 				{
+					//Increment depth counter
+					result++;
 					iter = iter->right;
 				}
-				else 
+				else if (find->data < iter->data)
 				{
+					//Increment depth counter
+					result++;
 					iter = iter->left;
 				}
-		//Increment depth counter
-				result++;
 			}
 		//Return value
 			return result;
