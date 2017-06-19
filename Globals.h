@@ -4,6 +4,9 @@
 #include<iostream>
 
 const int ARRAY_SIZE = 26;
+int bstEffiencyCounter;
+int hashedTableEffiencyCounter;
+int linkedListEffiencyCounter;
 
 
 int getMenuInput(int size)

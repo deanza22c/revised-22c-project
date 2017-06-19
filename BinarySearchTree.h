@@ -17,6 +17,7 @@ int findDepth(){						- return an integer containing the depth
 #include<fstream>
 #include<iostream>
 //#include"QueueADT.h"
+#include"Pokemon.h"
 
 template <class T>
 class DualLinkDataNode
@@ -90,14 +91,14 @@ protected:
 		}
 
 		// if the value was found, send this node's address to removeNode() function and set success to true
-		else if (subTreePtr->data == findThis)
+		else if (*subTreePtr->data == *findThis)
 		{
 			subTreePtr = removeNode(subTreePtr);
 			successBoolean = true;
 			return subTreePtr;
 		}
 		// check the left branch for the value
-		else if (subTreePtr->data > findThis)
+		else if (*subTreePtr->data > *findThis)
 		{
 			tempPtr = removeValue(subTreePtr->leftBranch, findThis, successBoolean);
 			subTreePtr->leftBranch = tempPtr;
@@ -154,7 +155,7 @@ protected:
 		// else, the sub-tree has two branches
 		else
 		{
-			// Find the inorder successor of the entry in N: it is in the left subtree rooted at Nâ€™s right child
+			// Find the inorder successor of the entry in N: it is in the left subtree rooted at N’s right child
 			tempPtr = removeLeftMostNode(currentNode->rightBranch, currentNode->data);  // data is referenced in removeleftnode function
 			currentNode->rightBranch = tempPtr;
 			currentNode->data = currentNode->data;  // because the data was referenced, it was changed
@@ -191,7 +192,7 @@ protected:
 			return nullptr;
 		}
 		// if the value is found, return true and unwind the recursion
-		else if (root->data == findThis)
+		else if (*root->data == *findThis)
 		{
 			successBoolean = true;
 			return root;
@@ -209,6 +210,38 @@ protected:
 			return searchTree(findThis, root->rightBranch, successBoolean);
 		}
 	}
+
+
+	// takes an int instead of a type T argument, and performs the same functions as the searchTree() funtion
+	DualLinkDataNode<T> *searchTree(const int &findThis, DualLinkDataNode<T> *root, bool &successBoolean, T &displayPtr)
+	{
+		// if the value was not found, return false
+		if (root == nullptr)
+		{
+			successBoolean = false;
+			return nullptr;
+		}
+		// if the value is found, return true and unwind the recursion
+		else if (*root->data == findThis)
+		{
+			successBoolean = true;
+			displayPtr = root->data;
+			return root;
+		}
+		// if the search value is less than or equal to the data stored in the node, use recursion to travel down the left branch
+		else if (*root->data > findThis)
+		{
+			return searchTree(findThis, root->leftBranch, successBoolean, displayPtr);
+		}
+		// else travel down the right branch
+		else
+		{
+			return searchTree(findThis, root->rightBranch, successBoolean, displayPtr);
+		}
+	}
+
+
+
 
 	//  Use a recursion to travel down the left branches until a dead end is found
 	//  Then travel down the right branch until a dead is found
@@ -228,11 +261,12 @@ protected:
 			writeFile << currentRoot->data << std::endl; // when both branches are nullptr's, print out the current node's data
 		}
 	}
-	
+
 	//this is the recursive function called when calculating the depth of tree
-	int findDepth(DualLinkDataNode<T> *currentRoot, int level){
+	int findDepth(DualLinkDataNode<T> *currentRoot, int level)
+	{
 		// if the currentRoot is null, that means this branch's patch is at the end
-		int templevel1; 
+		int templevel1;
 		int templevel2;
 		if (currentRoot == nullptr) return level;
 		level++;
@@ -307,7 +341,7 @@ public:
 	{
 		bool status;  // store the result of the remove node recursion
 
-		//  if the tree has no items, print out the error message
+					  //  if the tree has no items, print out the error message
 		if (!rootNode)
 		{
 			std::cout << "error: the tree has no items";
@@ -356,7 +390,7 @@ public:
 
 
 
-	bool searchForValue(const int &pokedexNumber)
+	bool searchForValue(const int &pokedexNumber, T &displayPtr)
 	{
 		bool status;
 
@@ -366,50 +400,23 @@ public:
 		}
 		else if (*rootNode->data == pokedexNumber)
 		{
+			displayPtr = rootNode->data;
 			return true;
 		}
 		// if the search value is less than or equal to the data in rootNode, travel down the left branch
 		else if (*rootNode->data > pokedexNumber)
 		{
 			//return searchTree(value, rootNode->leftBranch);
-			searchTree(pokedexNumber, rootNode->leftBranch, status);
+			searchTree(pokedexNumber, rootNode->leftBranch, status, displayPtr);
 
 		}
 		// else, travel down the right branch
 		else
 		{
 			//return searchTree(value, rootNode->rightBranch);
-			searchTree(pokedexNumber, rootNode->rightBranch, status);
+			searchTree(pokedexNumber, rootNode->rightBranch, status, displayPtr);
 		}
 		return status;
-	}
-
-	DualLinkDataNode<T> *searchTree(const int &findThis, DualLinkDataNode<T> *root, bool &successBoolean)
-	{
-		// if the value was not found, return false
-		if (root == nullptr)
-		{
-			successBoolean = false;
-			return nullptr;
-		}
-		// if the value is found, return true and unwind the recursion
-		else if (*root->data == findThis)
-		{
-			successBoolean = true;
-			return root;
-		}
-		// if the search value is less than or equal to the data stored in the node, use recursion to travel down the left branch
-		else if (*root->data > findThis)
-		{
-			//return searchTree(value, root->leftBranch);
-			return searchTree(findThis, root->leftBranch, successBoolean);
-		}
-		// else travel down the right branch
-		else
-		{
-			//return searchTree(findThis, root->rightBranch);
-			return searchTree(findThis, root->rightBranch, successBoolean);
-		}
 	}
 
 
@@ -489,11 +496,13 @@ public:
 			//post_orderTraversal(rootNode, writeFile);
 		}
 	}
-	
+
 	//public function which can be called in main to return an integer containning the depth
-	int findDepth(){
+	int findDepth()
+	{
 		int level = 0;
-		if (!rootNode){
+		if (!rootNode)
+		{
 			return level;
 		}
 		else
@@ -505,58 +514,84 @@ public:
 	int getHeight(DualLinkDataNode<T>*find)
 	{
 		//Validate that pointer is not null and exists in tree;
-		if (find == nullptr || searchforData(find->data)==false)
+		if (find == nullptr || this->searchForValue(find->data) == false)
 		{
 			return -1;
 		}
 		else
 		{
-		//Create return counter
-			int result=0;
-		//Create poiner to iterate with
+			//Create return counter
+			int result = 0;
+			//Create poiner to iterate with
 			DualLinkDataNode<T>* iter = rootNode;
-		//Iterate till data is matched
+			//Iterate till data is matched
 			while (iter->data != find->data)
 			{
-		//Based on comparisons determine which branch to follow
+				//Based on comparisons determine which branch to follow
 				if (find->data > iter->data)
 				{
-					//Increment depth counter
-					result++;
-					iter = iter->right;
+					iter = iter->rightBranch;
 				}
-				else if (find->data < iter->data)
+				else
 				{
-					//Increment depth counter
-					result++;
-					iter = iter->left;
+					iter = iter->leftBranch;
 				}
+				//Increment depth counter
+				result++;
 			}
-		//Return value
+			//Return value
 			return result;
 		}
 	}
-	
-	//Untested Indent Print I need to test if I incremented correnctly as well as view the output.
-	void printIndented(DualLinkDataNode<T>*start)
+
+	////Untested Indent Print I need to test if I incremented correnctly as well as view the output.
+	//void printIndented(DualLinkDataNode<T>*start)
+	//{
+	//	//Verify not null
+	//	if (start != nullptr)
+	//	{
+	//		//Call function on itself till we get to rightmost branch
+	//		printIndented(start->rightBranch);
+	//		//Print out number of tabs corresponding to depth of the object
+	//		//(May change it so it prints out an arrow if we have time)
+	//		for (int x = 0; x <getHeight(start); x++)
+	//		{
+	//			std::cout << "\t";
+	//		}
+	//		//Print out data (Verify ostream operator in Pokemon class to make sure out puts work)
+	//		std::cout << start->data << std::endl;
+	//		//Call function on left branch till tree is completed
+	//		printIndented(start->leftBranch);
+	//	}
+	//}
+
+
+	void printIndented2(DualLinkDataNode<T>* start, int tabs)
 	{
-	//Verify not null
 		if (start != nullptr)
 		{
-			//Call function on itself till we get to rightmost branch
-			printIndented(start->rightBranch);
-			//Print out number of tabs corresponding to depth of the object
-			//(May change it so it prints out an arrow if we have time)
-			for (int x = 0; x <getHeight(start);x++)
+			printIndented2(start->rightBranch, tabs + 1);
+			for (int x = 0; x < tabs; x++)
 			{
-				std::cout << "/t";
+				std::cout << "\t";
 			}
-			//Print out data (Verify ostream operator in Pokemon class to make sure out puts work)
 			std::cout << start->data << std::endl;
-			//Call function on left branch till tree is completed
-			printIndented(start->leftBranch);
+			printIndented2(start->leftBranch, tabs + 1);
 		}
 	}
+	void callPrintIndentedTree()
+	{
+		printIndented2(rootNode, 0);
+	}
+
+
+
+
+
+	//void callPrintIndentedTree()
+	//{
+	//	printIndented(rootNode);
+	//}
 };
 
 #endif
