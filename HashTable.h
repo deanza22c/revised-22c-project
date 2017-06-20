@@ -65,15 +65,31 @@ private:
 	int linkedListItemCount; // track the number of items in the linked list
 	LinkedList<Pokemon*> linkedListOverflow; //ONLY FOR LINKED LIST COLLISION
 
-								/*This function follows a mathematical algorithm that takes the paramater's primary data and returns an index.
-								Pre: Data - a pokemon pointer
-								Post:
-								Return: an integer
-								*/
+	/*This function follows a mathematical algorithm that takes the paramater's primary data and returns an index.
+	Pre: Data - a pokemon pointer
+	Post:
+	Return: an integer
+	*/
 	int hash(Pokemon* data)
 	{
 		//return (((data->getSerialNumber() * data->getSerialNumber()) + 1) % arrayLength);
 		return (data->getSerialNumber() - 1);  // quick and dirty hash algorithm
+		
+		//Hi cliff, these are the 3 best % algorithms i got for a size of 37.
+		
+		//PSEUDORANDOM METHOD RETURNS 67%. Adding 5 items added 1 to hash Table. 
+		//bad algorithm because it basically linear..., but it an option that he said we can use.
+		//return (((53 * data->getSerialNumber()) + 17 ) % arrayLength);
+		
+
+		// ((Square + 1) * Key) % arrayLength Hash function - 56% fill rate (21/26 of data inserted, or 81%)
+		// Good hash function in my opinion
+		//return (((data->getSerialNumber()) * data->getSerialNumber() + 1) * data->getSerialNumber()) % arrayLength;
+
+		// (Key ^ 5) % arrayLength - 67% fill rate (25/26 of data inserted, or 97%.
+		// This was trying to find something for specifically 37 that wasn't pseudorandom. 
+		//With size 37, it technically good.
+		//return ((data->getSerialNumber() * data->getSerialNumber() * data->getSerialNumber() * data->getSerialNumber() * data->getSerialNumber()) % arrayLength);
 	}
 
 	/*This function takes an index and then searches through the hashtable for an open slot.
