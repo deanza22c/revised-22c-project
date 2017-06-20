@@ -352,7 +352,7 @@ public:
 
 
 
-	operator int ()
+	operator int()
 	{
 		int number;
 		number = this->getSerialNumber();

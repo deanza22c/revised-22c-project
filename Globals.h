@@ -3,7 +3,7 @@
 #include<string>
 #include<iostream>
 
-const int ARRAY_SIZE = 36;
+const int ARRAY_SIZE = 36;  // 36 + 1 is prime
 int totalDataItems = 0; // track the total number of data items
 int bstEffiencyCounter = 0;  // track how many operations it took to insert the data into the tree
 int hashedTableEffiencyCounter = 0;  // track how many colision there are in the hashed table
@@ -31,24 +31,23 @@ int getIntegerInput()
 	bool hasAlphaChars = false;
 	getline(std::cin, inputString);
 	for (unsigned int count = 0; count < (inputString.length()); count++)
-		if (isdigit(inputString[count]) == 0)
-		{
-			hasAlphaChars = true;
-		}
+	if (isdigit(inputString[count]) == 0)
+	{
+		hasAlphaChars = true;
+	}
 	while (hasAlphaChars || inputString == "\0" || inputString[0] == '-')
 	{
 		hasAlphaChars = false;
 		std::cout << "only postive numbers are valid, try again: ";
 		getline(std::cin, inputString);
 		for (unsigned int count = 0; count < (inputString.length()); count++)
-			if (isdigit(inputString[count]) == 0)
-			{
-				hasAlphaChars = true;
-			}
+		if (isdigit(inputString[count]) == 0)
+		{
+			hasAlphaChars = true;
+		}
 	}
 	number = stoi(inputString);
 	return number;
 }
-
 
 #endif

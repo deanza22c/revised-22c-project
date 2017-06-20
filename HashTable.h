@@ -61,8 +61,9 @@ class HashTable
 private:
 	Pokemon** pokemonPtrArray;
 	int arrayLength;
-	int itemCount = 0;
+	int itemCount;
 	int linkedListItemCount; // track the number of items in the linked list
+	const int reHashFillPercent = 80;  // if the fill rate is greater than this percent, rehash the array
 	LinkedList<Pokemon*> linkedListOverflow; //ONLY FOR LINKED LIST COLLISION
 
 	/*This function follows a mathematical algorithm that takes the paramater's primary data and returns an index.
@@ -73,14 +74,16 @@ private:
 	int hash(Pokemon* data)
 	{
 		//return (((data->getSerialNumber() * data->getSerialNumber()) + 1) % arrayLength);
-		return (data->getSerialNumber() - 1);  // quick and dirty hash algorithm
-		
+		//return (data->getSerialNumber() - 1);  // quick and dirty hash algorithm
+
+
+
 		//Hi cliff, these are the 3 best % algorithms i got for a size of 37.
-		
+
 		//PSEUDORANDOM METHOD RETURNS 67%. Adding 5 items added 1 to hash Table. 
 		//bad algorithm because it basically linear..., but it an option that he said we can use.
-		//return (((53 * data->getSerialNumber()) + 17 ) % arrayLength);
-		
+		return (((53 * data->getSerialNumber()) + 17 ) % arrayLength);
+
 
 		// ((Square + 1) * Key) % arrayLength Hash function - 56% fill rate (21/26 of data inserted, or 81%)
 		// Good hash function in my opinion
@@ -193,6 +196,7 @@ public:
 	HashTable(int l)
 	{
 		linkedListItemCount = 0;
+		itemCount = 0;
 		arrayLength = (l + 1); // Hopefully Less collisions when size increased by 1.
 		pokemonPtrArray = new Pokemon*[arrayLength];
 		for (int i = 0; i < arrayLength; i++)
@@ -204,11 +208,18 @@ public:
 	//Destructor
 	~HashTable()
 	{
-		//std::cout << "Deleting hashTable" << std::endl;
-		//for (int count = 0; count < arrayLength; count++)
-		//{
-		//	delete[]pokemonPtrArray[count];
-		//}
+		// delete the pokemon instance's that are on the heap
+		for (int count = 0; count < arrayLength; count++)
+		{
+			if (pokemonPtrArray[count] != nullptr)
+			{
+				delete (pokemonPtrArray[count]);
+			}
+			else
+			{
+				continue;
+			}
+		}
 		delete[] pokemonPtrArray; // delete the dynamic array
 		pokemonPtrArray = nullptr;
 	}
@@ -307,7 +318,8 @@ public:
 		}
 
 		//This is for both Linked List and Linear Resolution
-		if (((double)itemCount / (double)arrayLength) >= 0.75)
+		//if (((double)itemCount / (double)arrayLength) >= 0.75) reHashFillPercent
+		if (((double)itemCount / (double)arrayLength) >= (static_cast<double>(reHashFillPercent / 100.0)))
 			rehash();
 	}
 

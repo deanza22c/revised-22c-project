@@ -345,7 +345,7 @@ public:
 	{
 		bool status;  // store the result of the remove node recursion
 
-					  //  if the tree has no items, print out the error message
+		//  if the tree has no items, print out the error message
 		if (!rootNode)
 		{
 			std::cout << "error: the tree has no items";

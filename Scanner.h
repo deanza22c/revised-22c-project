@@ -34,7 +34,7 @@ void startScanner()
 void displayPicture(int pictureNumber)
 {
 	hConWnd = GetConsoleWndHandle();
-	std::string message1 = "\n\tscan complete...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\npress <Enter> to display pokemon information...";  // 32 new lines
+	std::string message1 = "\n\tscan complete...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\npress <Enter> to display pokemon information...";  // 25 new lines
 	std::string message2 = "text";
 	if (hConWnd)
 	{
@@ -43,6 +43,7 @@ void displayPicture(int pictureNumber)
 
 		if (pictureNumber == 1)
 		{
+			system("cls");
 			BCX_Bitmap("test.bmp", message1, hConWnd, 123, 25, 50, 475, 475);
 		}
 		else
