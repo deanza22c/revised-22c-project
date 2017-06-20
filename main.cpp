@@ -1,13 +1,14 @@
 #include<iostream>
 #include<string>
 #include<fstream>
+//#include<iomanip>
 //#include<memory>
 #include<Windows.h>
 #include"Globals.h"
 #include"Scanner.h"
 #include"Pokemon.h"
 //#include"LinkedList.h"
-#include"LeoLinkedList.h"
+//#include"LeoLinkedList.h"
 #include"BinarySearchTree.h"
 #include"HashTable.h"
 
@@ -29,11 +30,11 @@ Pokemon *getDataMemoryAddress(ifstream &file)
 int main()
 {
 
-	// this makes the console window bigger
-	HWND console = GetConsoleWindow();
-	RECT r;
-	GetWindowRect(console, &r); //stores the console's current dimensions
-	MoveWindow(console, r.left, r.top, 1000, 600, TRUE);
+	//// this makes the console window bigger
+	//HWND console = GetConsoleWindow();
+	//RECT r;
+	//GetWindowRect(console, &r); //stores the console's current dimensions
+	//MoveWindow(console, r.left, r.top, 1000, 600, TRUE);
 
 
 	// before any choices are give, load the data file and build the hash table and binary search tree
@@ -41,6 +42,7 @@ int main()
 	// if you need to work on some file, just tag it with a "-A" or "-L" or "-H" and upload the file
 	ifstream dataRecordsFile;
 	dataRecordsFile.open("PokeStats.txt");
+	ofstream writeToDataRecordsFile; // in case add data is called, now the data can be written to the PokeStats.txt file
 
 
 	BinarySearchTree<Pokemon*> pokemonBST;
@@ -63,7 +65,7 @@ int main()
 		//pokemonLinkedList.push_end(tempPokemon);
 		pokemonBST.addValue(tempPokemon);
 		pokemonHashedTable.add(tempPokemon);
-
+		totalDataItems++;
 		//Pokemon *newPokemon = nullptr;
 		//newPokemon = new Pokemon;
 		//dataRecordsFile >> *newPokemon;
@@ -71,11 +73,11 @@ int main()
 		//pokemonBST.addValue(newPokemon);
 	}
 
+	dataRecordsFile.close(); // close the file
 
 
 
 
-	dataRecordsFile.close();
 
 	//dataRecordsFile.open("PokeStats.txt");
 	//Pokemon pokemonArray[ARRAY_SIZE];
@@ -128,12 +130,15 @@ int main()
 			offense = getIntegerInput();
 			cout << "enter in pokemon's defense stat: ";
 			defense = getIntegerInput();
+			cout << "\npress <Enter> to return to main menu...";
+			cin.get();
 			Pokemon *addThisPokemon = nullptr;
 			addThisPokemon = new Pokemon(name, creatureIndexNumber, elements, offense, defense);
 			pokemonBST.addValue(addThisPokemon);
 			pokemonHashedTable.add(addThisPokemon);
-			cout << "\npress <Enter> to return to main menu...";
-			cin.get();
+			totalDataItems++;
+			writeToDataRecordsFile.open("PokeStats.txt", ios::app | ios::ate);
+			writeToDataRecordsFile << endl << creatureIndexNumber << "|" << name << "|" << elements << "|" << offense << "|" << defense;
 			break;
 		}
 		case 2:
@@ -151,8 +156,15 @@ int main()
 			removeThisPokemon->setSerialNumber(removeNumber);
 			bool status = pokemonBST.deleteValue(removeThisPokemon);
 			bool status2 = pokemonHashedTable.removebyData(removeThisPokemon);
-
-			cout << status << " " << status2 << endl;
+			if (!status && !status2)
+			{
+				cout << "pokemon NOT found\n";
+			}
+			else
+			{
+				cout << "pokemon number: " << removeNumber << " has been removed from the database\n";
+			}
+			//cout << status << " " << status2 << endl;
 			cout << "\npress <Enter> to return to main menu...";
 			cin.get();
 			delete removeThisPokemon;
@@ -164,8 +176,8 @@ int main()
 			// this function will use the binary search tree to find and display the creature based on the number entered
 
 			system("cls");
-			cout << "this is the find and display data choice\n";
-			cout << "enter in creature number to search for: ";
+			//cout << "this is the find and display data choice\n";
+			cout << "\n  enter in creature number to search for: ";
 			creatureIndexNumber = getIntegerInput();
 
 			//Pokemon *tempPokemon = nullptr;
@@ -178,8 +190,13 @@ int main()
 
 			if (status)
 			{
-				cout << "creature number: " << creatureIndexNumber << " has been found\n";
-				cout << "creature name: " << displayThisPokemon->getPokemonName() << endl;
+				cout << "pokedex number: " << creatureIndexNumber << " has been found\n";
+				cout << "displaying the information of the pokemon:\n";
+				cout << endl;
+				cout << setw(30) << left << "pokemon name: " << displayThisPokemon->getPokemonName() << endl;
+				cout << setw(30) << left << "pokemon elemental type(s): " << displayThisPokemon->getElementalType() << endl;
+				cout << setw(30) << left << "pokemon offense stat: " << displayThisPokemon->getOffenseStat() << endl;
+				cout << setw(30) << left << "pokemon defense stat: " << displayThisPokemon->getDefenseStat() << endl;;
 			}
 			else
 			{
@@ -196,23 +213,17 @@ int main()
 			// list all the data stored in the hashed table based on the order in the array
 			// leo will write this function
 			system("cls");
-			cout << "this is the list data in hash table choice\n";
+			cout << "this is the list data in hash table array:\n\n";
 			pokemonHashedTable.hashDisplayAll();
-
-			//pokemonLinkedList.displayList();
 			cout << "\npress <Enter> to return to main menu...";
 			cin.get();
-
-
 			break;
 		}
 		case 5:
 		{
 			// call to list data in key sequence (sorted)
 			// list all data using the creature number as the sort method
-			// I think you can use either the hashed table or the binary search tree for the data
-			// but lets go with the hashed table for now
-			// leo will work on this
+
 			system("cls");
 			cout << "this is the list data in key sequence (inorder traverse) choice\n";
 			pokemonBST.printBreadthFirstTraverse();
@@ -223,7 +234,9 @@ int main()
 		case 6:
 		{
 			// call to print indented tree function
-			// cout the binary tree horizontally, alex and hammud will collaborate as needed on this
+			// cout the binary tree horizontally, with the root node on the left side of the screen
+			// and the tree expanding out to the right side of the screen
+
 			system("cls");
 			cout << "this is the printed indented tree choice\n";
 			pokemonBST.callPrintIndentedTree();
@@ -233,15 +246,17 @@ int main()
 		}
 		case 7:
 		{
-			// call to effiency
-			// display the effiency of our hashed table and binary search tree
+			// call to effiency display
+			// display the effiency of the hashed table, binary search tree, and linked list
 
-			// convert the fill rate into an <int>
 			int hashedTableFillRate = ((static_cast<double>(pokemonHashedTable.getItemCount()) / static_cast<double>(pokemonHashedTable.getLength())) * 100);
-
+			int bstInsertEffiency = bstEffiencyCounter / totalDataItems;
+			int linkedListEffiency = linkedListEffiencyCounter / pokemonHashedTable.getLinkedListCount();
 			system("cls");
-			cout << "this is the effiency choice\n";
-			cout << "Hashed Table fill rate is: " << hashedTableFillRate << "%";
+			cout << "this is the effiency of the three data structures:\n\n";
+			cout << "Hashed Table fill rate is: " << hashedTableFillRate << "%\n";
+			cout << "Binary Search Tree had " << bstEffiencyCounter << " operation(s) to insert " << totalDataItems << " item(s), " << bstInsertEffiency << " per item average.\n";
+			cout << "Linked List had " << linkedListEffiencyCounter << " operation(s) to insert " << pokemonHashedTable.getLinkedListCount() << " item(s), " << linkedListEffiency << " per item average.\n";
 			cout << "\npress <Enter> to return to main menu...";
 			cin.get();
 			break;
@@ -253,7 +268,7 @@ int main()
 			// display an out line of the creature, flash the words scanning on the the screen
 			// then after the 3 seconds display the full picture and some stats about the creature
 			// it will only display one creature for now, and in the future it may display a random pokemon
-			cout << "this is the scanner choice\n";
+			//cout << "this is the scanner choice\n";
 			startScanner();
 			break;
 		}
@@ -273,5 +288,6 @@ int main()
 
 	cout << "\npress <Enter> to exit...";
 	cin.get();
+	writeToDataRecordsFile.close();
 	return 0;
 }

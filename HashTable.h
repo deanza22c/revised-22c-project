@@ -62,6 +62,7 @@ private:
 	Pokemon** pokemonPtrArray;
 	int arrayLength;
 	int itemCount = 0;
+	int linkedListItemCount; // track the number of items in the linked list
 	LinkedList<Pokemon*> linkedListOverflow; //ONLY FOR LINKED LIST COLLISION
 
 								/*This function follows a mathematical algorithm that takes the paramater's primary data and returns an index.
@@ -72,7 +73,7 @@ private:
 	int hash(Pokemon* data)
 	{
 		//return (((data->getSerialNumber() * data->getSerialNumber()) + 1) % arrayLength);
-		return (data->getSerialNumber() - 1);
+		return (data->getSerialNumber() - 1);  // quick and dirty hash algorithm
 	}
 
 	/*This function takes an index and then searches through the hashtable for an open slot.
@@ -145,6 +146,7 @@ private:
 	{
 		Node<Pokemon*>* temp = new Node<Pokemon*>(data);
 		linkedListOverflow.addAnywhere(0, temp);
+		linkedListItemCount++;
 	}
 
 	/*This function takes a pokemon pointer and searches through the link-list for it.
@@ -174,6 +176,7 @@ public:
 	//Constructor
 	HashTable(int l)
 	{
+		linkedListItemCount = 0;
 		arrayLength = (l + 1); // Hopefully Less collisions when size increased by 1.
 		pokemonPtrArray = new Pokemon*[arrayLength];
 		for (int i = 0; i < arrayLength; i++)
@@ -185,7 +188,11 @@ public:
 	//Destructor
 	~HashTable()
 	{
-		std::cout << "Deleting hashTable" << std::endl;
+		//std::cout << "Deleting hashTable" << std::endl;
+		//for (int count = 0; count < arrayLength; count++)
+		//{
+		//	delete[]pokemonPtrArray[count];
+		//}
 		delete[] pokemonPtrArray; // delete the dynamic array
 		pokemonPtrArray = nullptr;
 	}
@@ -198,7 +205,11 @@ public:
 	void hashDisplay(int index)
 	{
 		if (pokemonPtrArray[index] != nullptr)
-			std::cout << pokemonPtrArray[index] << std::endl;
+			std::cout << "[" << index << "] " << pokemonPtrArray[index]->getPokemonName() << std::endl;
+		else
+		{
+			std::cout << "[" << index << "] <empty>" << std::endl;
+		}
 	}
 
 	/*This function displays the content stored in an index in the linked list..
@@ -224,11 +235,11 @@ public:
 		{
 			hashDisplay(i);
 		}
-
+		std::cout << std::endl;
 		//this is INCLUDED in hashDisplayAll IF you are using LINKED LIST COLLISION RESOLUTION.
 		//REMOVE IF NOT USING LINKEDLIST COLLISION RESOLUTION.
 		int linkedSize = linkedListOverflow.getCurrentSize();
-		std::cout << "Now displaying everything stored in Linked List" << std::endl;
+		std::cout << "Now displaying everything stored in the self adjusting linked list:" << std::endl;
 		for (int j = 0; j < linkedSize; j++)
 		{
 			LinkedListDisplay(j);
@@ -303,6 +314,10 @@ public:
 			//return isRemoved;
 			index = collisionLLSearch(data);
 			isRemoved = linkedListOverflow.removeAnywhere(index);
+			if (isRemoved)
+			{
+				linkedListItemCount--;
+			}
 			return isRemoved;
 		}
 		else if (pokemonPtrArray[index] != nullptr)
@@ -337,6 +352,10 @@ public:
 			{
 				index = collisionLLSearch(data);
 				isRemoved = linkedListOverflow.removeAnywhere(index);
+				if (isRemoved)
+				{
+					linkedListItemCount--;
+				}
 				return isRemoved;
 			}
 		}
@@ -358,6 +377,10 @@ public:
 			//LINKED LIST COLLISION RESOLUTION OUTER ELSE STATEMENT
 			index = collisionLLSearch(data);
 			isRemoved = linkedListOverflow.removeAnywhere(index);
+			if (isRemoved)
+			{
+				linkedListItemCount--;
+			}
 			return isRemoved;
 		}
 
@@ -478,6 +501,10 @@ public:
 	int getItemCount() const
 	{
 		return itemCount;
+	}
+	int getLinkedListCount() const
+	{
+		return linkedListItemCount;
 	}
 
 	// Setters

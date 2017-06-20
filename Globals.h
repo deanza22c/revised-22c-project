@@ -3,10 +3,11 @@
 #include<string>
 #include<iostream>
 
-const int ARRAY_SIZE = 26;
-int bstEffiencyCounter;
-int hashedTableEffiencyCounter;
-int linkedListEffiencyCounter;
+const int ARRAY_SIZE = 36;
+int totalDataItems = 0; // track the total number of data items
+int bstEffiencyCounter = 0;  // track how many operations it took to insert the data into the tree
+int hashedTableEffiencyCounter = 0;  // track how many colision there are in the hashed table
+int linkedListEffiencyCounter = 0;  // track how many operations it took to insert the data into the linked list
 
 
 int getMenuInput(int size)

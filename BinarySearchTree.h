@@ -58,6 +58,7 @@ protected:
 		if (currentSubTree == nullptr)
 		{
 			return newNode;
+			bstEffiencyCounter++;
 		}
 
 		else
@@ -66,11 +67,13 @@ protected:
 			if (*currentSubTree->data >= *newNode->data)
 			{
 				currentSubTree->leftBranch = addInOrder(currentSubTree->leftBranch, newNode);
+				bstEffiencyCounter++;
 			}
 
 			else
 			{
 				currentSubTree->rightBranch = addInOrder(currentSubTree->rightBranch, newNode);
+				bstEffiencyCounter++;
 			}
 
 			return currentSubTree;
@@ -325,6 +328,7 @@ public:
 		if (!rootNode)
 		{
 			rootNode = newNode;
+			bstEffiencyCounter++;
 		}
 
 		//  else, process the node using a binary search to find the correct location for the value
@@ -386,10 +390,6 @@ public:
 		return status;
 	}
 
-
-
-
-
 	bool searchForValue(const int &pokedexNumber, T &displayPtr)
 	{
 		bool status;
@@ -418,8 +418,6 @@ public:
 		}
 		return status;
 	}
-
-
 
 
 	//  The public function to modify a value in the tree
@@ -573,7 +571,7 @@ public:
 			printIndented2(start->rightBranch, tabs + 1);
 			for (int x = 0; x < tabs; x++)
 			{
-				std::cout << "\t";
+				std::cout << "\t\t";
 			}
 			std::cout << start->data << std::endl;
 			printIndented2(start->leftBranch, tabs + 1);

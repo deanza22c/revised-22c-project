@@ -1,15 +1,12 @@
 /*
 This file contains:
 Linked List
-Stack
-Queue
-BST
 */
 
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
-//#include "LeoNode.h"
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -76,11 +73,7 @@ public:
 		return ptrRear;
 	}
 
-};
-//#endif // !NODE_H
-
-
-
+}; // end of node class
 
 
 
@@ -147,6 +140,7 @@ public:
 				prevPtr = curPtr;
 				curPtr = curPtr->getPtrFront();
 				i++;
+				linkedListEffiencyCounter++;
 			}
 			newNode->setPtrFront(curPtr);
 			if (prevPtr == nullptr)
@@ -154,6 +148,7 @@ public:
 			else
 				prevPtr->setPtrFront(newNode);
 			itemCount++;
+			linkedListEffiencyCounter++;
 			isSuccess = true;
 			return isSuccess;
 		}
@@ -206,12 +201,12 @@ public:
 		{
 			int index = 0;
 			Node<T> *curPtr = headPtr;
-			while (curPtr->getData() != searchEntry && curPtr->getPtrFront() != nullptr)
+			while (*curPtr->getData() != *searchEntry && curPtr->getPtrFront() != nullptr)
 			{
 				curPtr = curPtr->getPtrFront();
 				index++;
 			}
-			if (curPtr->getData() == searchEntry)
+			if (*curPtr->getData() == *searchEntry)
 				return index; // Data found
 			else
 				return -1; // Data not found
