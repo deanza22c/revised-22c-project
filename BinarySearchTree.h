@@ -1,15 +1,74 @@
 /*
-THIS PROGRAM IS A SIMPLE BINARY SEARCH TREE
-EXPOSED BINARY SEARCH TREE CLASS FUNCTIONS
-void printPostOrderTraverse(std::ofstream &writeFile)		- print post order traversal to file
-void printBreadthFirstTraverse(std::ofstream &writeFile)	- print breadth first traversal to file
-void breadth_firstTraversal()								- print breadth first traversal to screen
-bool searchForValue(T value)								- find node in tree
-void searchAndModify(T findThis)							- find and replace node value in tree *will change tree structure*
-bool deleteValue(T value)									- delete node from tree *will change tree structure*
-void addValue(T value)										- add node to tree *if data values are the same, the root will be saved to the left*
-int findDepth(){						- return an integer containing the depth
+TEMPLATE CLASS - NODE CLASS - PUBLIC
+	PROPERTIES
+		T data
+		DualLinkDataNode<T> *leftBranch
+		DualLinkDataNode<T> *rightBranch
+	FUNCTIONS
+		DualLinkDataNode() 	 			| DEFAULT CONSTUCTOR
+		DualLinkDataNode(T value) 		| TAKES A VALUE ASSIGNS TO DATA
+
+TEMPLATE CLASS - BINARY SEARCH TREE - PRIVATE
+	- DualLinkDataNode<T> *rootNode		
+
+TEMPLATE CLASS - BINARY SEARCH TREE - PUBLIC FUNCTIONS
+	- void addValue(T value)
+		|
+		| CALLES THE PROTECTED RECURSIVE FUNCTION ADDINORDER();
+		| TRACKS THE BST EFFICENCY, EFFIENCY GROWS EVERY AFTER EVERY EVAULATION TO FIND AN APPROPRIATE LEAF NODE TO MAKE AN INSERTION
+		|
+	-bool deleteValue(T value)
+		|
+		| GIVEN A VALUE OF TYPE T THIS FUNCTION FINDS THE VALUE THEN CALLS REMOVENODE()
+		| CALLS PROTECTED: REMOVEVALUE()
+		|  - REMOVEVALUE FIND THE NODE IN THE BST THEN CALLES REMOVENODE() WHICH REMOVES NODE
+		|  - IF THE NODE HAS 2 CHILDREN FINDLEFTMOSTNODE() IS CALLED TO PRESERVE BST UPON DELETION
+	 	|
+	bool searchForValue(T value)
+		|
+		| CHECKS IF THE TREE HAS VALUE, 
+		| CALLS PROTECTED: SEARCHTREE()
+		|
+	bool searchForValue(const int &pokedexNumber, T &displayPtr)
+		|
+		| FUNCTIONS CREATED FOR POKEMON PROJECT WHICH TAKES A INTERGER, INSTEAD OF TYPE T
+		| FUNCTION DEPENDS ON TYPE TO HANDING OPERATIONS WHICH RETURN PRIMARY DATA TYPES, FROM POINTER PROPERTY
+		| CALLS PROTECTED: SEARCHTREE()
+		|
+	void searchAndModify(T findThis)
+		|
+		| TWO STEP FUNCTION, 1ST SEARCH TREE FOR VALUE, WILL COUT TO TERMINAL IF NOT FOUND
+		| 2ND, IF FOUND CALLS CIN TO READ IN NEW VALUE.
+		|
+	IN ORDER TRAVERSAL - void printBreadthFirstTraverse() - WARNING - 
+		|
+		| WARNING - THIS FUNCTION WILL PRINT INORDER TRAVERSAL!! NOT BREADTH FIRST
+		| CALLS THE RECURSIVE FUNCTION 	coutBreadth_firstTraversal()
+		|
+	int findDepth()
+		|
+		| RETURNS THE DEPTH OF THE BST
+		| CALLS THE PROTECTED RECURSIVE FUNCTION FINDDEPTH()
+		| FUNCTION TAKES NOT ARGUMENT IN ORDER TO BE CALLED ANYWHERE A BST OBJECT IS CREATED
+		|
+	int getHeight(DualLinkDataNode<T>*find)
+		|
+		| RETURNS THE DEPTH OF THE BST
+		|
+	void printIndented2(DualLinkDataNode<T>* start, int tabs)
+		|
+		| PRINTS THE INDENTED TREE
+		| MUST HAVE ACCESS TO THE ROOT NODE
+		| CALLED BY void callPrintIndentedTree()
+		| CALLS GETHEIGHT()
+		|
+	void callPrintIndentedTree()
+		|
+		| CALL TO PRINT THE INDENTED TREE
+		| CALLS PRINT INDENTED TRUEE
+		|
 */
+
 
 #ifndef BINARYSEARCHTREE_H
 #define BINARYSEARCHTREE_H
@@ -158,7 +217,7 @@ protected:
 		// else, the sub-tree has two branches
 		else
 		{
-			// Find the inorder successor of the entry in N: it is in the left subtree rooted at N’s right child
+			// Find the inorder successor of the entry in N: it is in the left subtree rooted at Nâ€™s right child
 			tempPtr = removeLeftMostNode(currentNode->rightBranch, currentNode->data);  // data is referenced in removeleftnode function
 			currentNode->rightBranch = tempPtr;
 			currentNode->data = currentNode->data;  // because the data was referenced, it was changed
@@ -390,6 +449,9 @@ public:
 		return status;
 	}
 
+	//this function is used specifically for the 22c group project
+	//takes a interger for the primary property and says if it is in the BST
+	//this functions relies heavily on the overloaded operators in type T's definition
 	bool searchForValue(const int &pokedexNumber, T &displayPtr)
 	{
 		bool status;
@@ -455,8 +517,8 @@ public:
 	}
 
 
-
-	//  - first traversal mechanism - PRINTS TO FILE
+	//WARNING, THIS IS NOT A BREADTH FIRST TRAVERSAL - THIS IS AN INORDER TRAVERSAL
+	//  FUNCTION CALLS THE THE
 	void printBreadthFirstTraverse()
 	{
 		if (rootNode == nullptr)
@@ -470,6 +532,7 @@ public:
 		}
 	}
 
+	//WARNING, THIS IS NOT A BREADTH FIRST TRAVERSAL - THIS IS AN INORDER TRAVERSAL
 	//  breadth - first traversal mechanism - PRINTS TO TERMINAL
 	void coutBreadth_firstTraversal(DualLinkDataNode<T> *nodePtr) const
 	{
@@ -563,7 +626,10 @@ public:
 	//	}
 	//}
 
-
+	//this function prints the indenteed tree, the function tracks the depths that the node being printed resides on,
+	//based on a nodes depth there will will be a certain amount in indentiations made.
+	//the right most node will be printed on top, the left most node willbe printed on the bottom.
+	//this print functions prints in a horizontal direction.
 	void printIndented2(DualLinkDataNode<T>* start, int tabs)
 	{
 		if (start != nullptr)
