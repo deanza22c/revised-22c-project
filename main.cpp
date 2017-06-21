@@ -1,20 +1,24 @@
+/*
+This program reads in data to create pokemon class objects, which the pointers are stored in linked lists
+binary search tree, and a hashed table
+
+The main functions of the program are to read in new data, remove data, display sorted data and calculate effeincy
+
+The option part of the programs emulates the functions of a pokedex scanner and shows two pictures to demostrate that effect
+*/
+
 #include<iostream>
 #include<string>
 #include<fstream>
-//#include<iomanip>
-//#include<memory>
 #include<Windows.h>
 #include"Globals.h"
 #include"Scanner.h"
 #include"Pokemon.h"
-//#include"LinkedList.h"
-//#include"LeoLinkedList.h"
 #include"BinarySearchTree.h"
 #include"HashTable.h"
 #include"OffenseDefenseLinkedList.h"
 
 using namespace std;
-//Pokemon *getDataMemoryAddress(ifstream);
 int getIntegerInput();
 
 // This is the function that creates the pokemon objects, all other functions only use pointers
@@ -36,8 +40,8 @@ int main()
 	ofstream writeToDataRecordsFile; // in case add data is called, now the data can be written to the PokeStats.txt file
 
 
-	BinarySearchTree<Pokemon*> pokemonBST;
-	HashTable pokemonHashedTable(ARRAY_SIZE);
+	BinarySearchTree<Pokemon*> pokemonBST;  // Binary Search Tree structure
+	HashTable pokemonHashedTable(ARRAY_SIZE);  // Hased Table structure
 	OffenseDefenseList pokemonOffenseLinkedList(1);  // linked list sorting the pokemon by offense number
 	OffenseDefenseList pokemonDefenseLinkedList(0);  // linked list sorting the pokemon by defense number
 
@@ -94,7 +98,8 @@ int main()
 			cout << "this is the add data choice\n";
 			cout << "enter in pokemon's name: ";
 			getline(cin, name);
-			cout << "enter in pokemon's pokedex number: ";
+			cout << "enter in pokemon's pokedex number, the number must be a whole number greater than zero\n";
+			cout << "enter the number: ";
 			creatureIndexNumber = getIntegerInput();
 
 			// if the number is less than 1, re-prompt for input
@@ -106,9 +111,9 @@ int main()
 
 			cout << "enter in pokemon's elements: ";
 			getline(cin, elements);
-			cout << "enter in pokemon's offense stat: ";
+			cout << "enter in pokemon's offense (only whole numbers are valid) number: ";
 			offense = getIntegerInput();
-			cout << "enter in pokemon's defense stat: ";
+			cout << "enter in pokemon's defense (only whole numbers are valid) number: ";
 			defense = getIntegerInput();
 			cout << "\npress <Enter> to return to main menu...";
 			cin.get();
@@ -178,7 +183,8 @@ int main()
 			// this function will use the binary search tree to find and display the creature based on the number entered
 
 			system("cls");
-			cout << "\n enter in creature number to search for: ";
+			cout << "\nenter in pokemon's pokedex number to search for, the number must be a whole number greater than zero.\n";
+			cout << "enter the number: ";
 			creatureIndexNumber = getIntegerInput();
 
 			Pokemon *displayThisPokemon = nullptr;
@@ -192,7 +198,7 @@ int main()
 				cout << "pokedex number: " << creatureIndexNumber << " has been found\n";
 				cout << endl;
 				cout << "displaying the information of the pokemon:\n";
-				cout << "-------------------------------------------------\n";
+				cout << "------------------------------------------\n";
 				cout << setw(30) << left << "pokemon name: " << displayThisPokemon->getPokemonName() << endl;
 				cout << setw(30) << left << "pokemon elemental type(s): " << displayThisPokemon->getElementalType() << endl;
 				cout << setw(30) << left << "pokemon offense stat: " << displayThisPokemon->getOffenseStat() << endl;
@@ -312,4 +318,4 @@ int main()
 	cin.get();
 	writeToDataRecordsFile.close();
 	return 0;
-}
+} // end of main()

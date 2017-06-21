@@ -1,3 +1,5 @@
+// Scanner.h will display two pictures when it is called along with some flavor text
+
 #ifndef SCANNER_H
 #define SCANNER_H
 #include<iostream>
@@ -11,8 +13,9 @@ static HWND  hConWnd;
 void displayPicture(int);
 HWND BCX_Bitmap(char*, std::string, HWND = 0, int = 0, int = 0, int = 0, int = 0, int = 0, int = 0, int = 0, int = 0);
 HWND GetConsoleWndHandle(void);
-//void displayMessage();
 
+
+// This function is what starts the process to display the pictures
 void startScanner()
 {
 	system("cls");
@@ -20,21 +23,17 @@ void startScanner()
 	std::cout << "press <Enter> to start scanning the creature...\n";
 	std::cin.get();
 
-
+	system("cls");
 	displayPicture(1);
-	//system("cls");
-	//Sleep(5000);
+	system("cls");
 	displayPicture(2);
-
-	//std::cout << "press <Enter> to return to main menu...";
-	//std::cin.get();
 }
 
 
 void displayPicture(int pictureNumber)
 {
 	hConWnd = GetConsoleWndHandle();
-	std::string message1 = "\n\tscan complete...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\npress <Enter> to display pokemon information...";  // 25 new lines
+	std::string message1 = "\n\tscan complete...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\npress <Enter> to display pokemon information...";  // 25 new lines to push the message to the bottom of the screen
 	std::string message2 = "text";
 	if (hConWnd)
 	{
@@ -50,22 +49,8 @@ void displayPicture(int pictureNumber)
 		{
 			BCX_Bitmap("pikachuFull.bmp", message2, hConWnd, 123, 25, 50, 475, 475);
 		}
-
-		//getchar();  // wait
 	}
 }
-
-//void displayMessage()
-//{
-//	std::cout << "\n\tscan complete...";
-//	std::cout << "\n\n\n\n\n\n\n\n\n\n"; // 10 new lines
-//	std::cout << "\n\n\n\n\n\n\n\n\n\n"; // 10 new lines
-//	std::cout << "\n\n\n\n\n\n\n\n\n\n"; // 10 new lines
-//	std::cout << "\n\n\n\n\n\n";  // 6 new lines
-//	std::cout << "\npress<Enter> to display pokemon information...";
-//	std::cin.get();
-//}
-
 
 // draw the bitmap
 HWND BCX_Bitmap(char* Text, std::string displayText, HWND hWnd, int id, int X, int Y, int W, int H, int Res, int Style, int Exstyle)
@@ -86,11 +71,18 @@ HWND BCX_Bitmap(char* Text, std::string displayText, HWND hWnd, int id, int X, i
 	SendMessage(pictureFrame, (UINT)STM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitmap);
 	if (W || H) SetWindowPos(pictureFrame, HWND_TOP, X, Y, W, H, SWP_DRAWFRAME);
 
-	//displayMessage();
+	// display the text to go along with the displayed picture
 	if (displayText == "text")
 	{
-		//std::cout << " " << std::setw(8) << std::left << "setw = 8";
-		std::cout << "\t\t\t\t\t\t Pikachu";
+		std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+		std::cout << " Pikachu";
+		std::cout << std::endl;
+		std::cout << " Classification: Mouse Pokemon\n";
+		std::cout << " Height: 1'04\"\n";
+		std::cout << " Weight: 13.2 lbs\n";
+		std::cout << " Type: Electric\n";
+		std::cout << std::endl;
+		std::cout << "\t When several of these Pokemon gather, their electricity could build and cause lightning storms.\n";
 		std::cout << "\npress <Enter> to return to main menu...";
 		std::cin.get();
 	}
@@ -108,10 +100,15 @@ HWND BCX_Bitmap(char* Text, std::string displayText, HWND hWnd, int id, int X, i
 		std::cout << "scanning...";
 		Sleep(1000);
 		system("cls");
+		Sleep(600);
+		std::cout << "scanning...";
+		Sleep(1000);
+		system("cls");
 		std::cout << displayText;
 		std::cin.get();
 	}
 
+	// remove the picture from the screen
 	DestroyWindow(pictureFrame);
 	return pictureFrame;
 }

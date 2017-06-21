@@ -1,3 +1,6 @@
+//  This file contains functions are counters that are used through out the program
+//  the two functions filter out bad number inputs
+
 #ifndef GLOBALS_H
 #define GLOBALS_H
 #include<string>
