@@ -66,11 +66,11 @@ private:
 	const int reHashFillPercent = 80;  // if the fill rate is greater than this percent, rehash the array
 	LinkedList<Pokemon*> linkedListOverflow; //ONLY FOR LINKED LIST COLLISION
 
-	/*This function follows a mathematical algorithm that takes the paramater's primary data and returns an index.
-	Pre: Data - a pokemon pointer
-	Post:
-	Return: an integer
-	*/
+											 /*This function follows a mathematical algorithm that takes the paramater's primary data and returns an index.
+											 Pre: Data - a pokemon pointer
+											 Post:
+											 Return: an integer
+											 */
 	int hash(Pokemon* data)
 	{
 		//return (((data->getSerialNumber() * data->getSerialNumber()) + 1) % arrayLength);
@@ -82,7 +82,7 @@ private:
 
 		//PSEUDORANDOM METHOD RETURNS 67%. Adding 5 items added 1 to hash Table. 
 		//bad algorithm because it basically linear..., but it an option that he said we can use.
-		return (((53 * data->getSerialNumber()) + 17 ) % arrayLength);
+		return (((53 * data->getSerialNumber()) + 17) % arrayLength);
 
 
 		// ((Square + 1) * Key) % arrayLength Hash function - 56% fill rate (21/26 of data inserted, or 81%)
@@ -288,7 +288,7 @@ public:
 		int hashIndex; //basically holds index after hash function
 		hashIndex = hash(data); // Call hash function (see hash)
 
-		// if the hashIndex number is greater than the size of the array, add the item to the linked list
+								// if the hashIndex number is greater than the size of the array, add the item to the linked list
 		if (hashIndex > arrayLength)
 		{
 			collisionLinkList(data);

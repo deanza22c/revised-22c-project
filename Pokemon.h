@@ -20,7 +20,6 @@ public:
 		pokemonName = "unknown name";
 		serialNumber = -1;  // -1 because you can not enter anything less than 1 as a valid serial number
 		elementalType = "unknown type";
-		//type2 = "";
 		offense = 0;
 		defense = 0;
 	}
@@ -29,7 +28,6 @@ public:
 		pokemonName = name;
 		serialNumber = idNumber;
 		elementalType = emelents;
-		//type2 = "";
 		offense = offenseNumber;
 		defense = defenseNumber;
 	}
@@ -114,27 +112,6 @@ public:
 		return file;
 	}
 
-	//// overload unique ptr input stream operator
-	//friend std::ifstream& operator >> (std::ifstream &file, std::unique_ptr<Pokemon, std::default_delete<Pokemon>> &creature)
-	//{
-	//	std::string tempString;
-	//	int tempNumber;
-	//	getline(file, tempString, '|');
-	//	tempNumber = std::stoi(tempString);
-	//	creature->setSerialNumber(tempNumber);
-	//	getline(file, tempString, '|');
-	//	creature->setPokemonName(tempString);
-	//	getline(file, tempString, '|');
-	//	creature->setElementType(tempString);
-	//	//getline(file, tempStr, '|');
-	//	//p.setType2(tempStr);
-	//	getline(file, tempString, '|');
-	//	creature->setOffenseStat(std::stoi(tempString));
-	//	getline(file, tempString, '\n');
-	//	creature->setDefenseStat(std::stoi(tempString));
-	//	return file;
-	//}
-
 	//  Overload the instream pointer operator
 	friend std::ifstream& operator >> (std::ifstream &file, Pokemon *&creature)
 	{
@@ -155,9 +132,6 @@ public:
 		creature->setDefenseStat(std::stoi(tempString));
 		return file;
 	}
-
-
-
 
 	// overloaded out stream operator 
 	friend std::ostream &operator << (std::ostream &outStream, Pokemon &creature)

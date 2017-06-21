@@ -31,20 +31,20 @@ int getIntegerInput()
 	bool hasAlphaChars = false;
 	getline(std::cin, inputString);
 	for (unsigned int count = 0; count < (inputString.length()); count++)
-	if (isdigit(inputString[count]) == 0)
-	{
-		hasAlphaChars = true;
-	}
+		if (isdigit(inputString[count]) == 0)
+		{
+			hasAlphaChars = true;
+		}
 	while (hasAlphaChars || inputString == "\0" || inputString[0] == '-')
 	{
 		hasAlphaChars = false;
 		std::cout << "only postive numbers are valid, try again: ";
 		getline(std::cin, inputString);
 		for (unsigned int count = 0; count < (inputString.length()); count++)
-		if (isdigit(inputString[count]) == 0)
-		{
-			hasAlphaChars = true;
-		}
+			if (isdigit(inputString[count]) == 0)
+			{
+				hasAlphaChars = true;
+			}
 	}
 	number = stoi(inputString);
 	return number;
