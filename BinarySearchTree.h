@@ -569,91 +569,72 @@ public:
             findDepth(rootNode, level);
         }
     }
-    //function that uses comparison of data to find the depth of an item in the tree
-    int getHeight(DualLinkDataNode<T>*find)
-    {
-        //Validate that pointer is not null and exists in tree;
-        if (find == nullptr || this->searchForValue(find->data) == false)
-        {
-            return -1;
-        }
-        else
-        {
-            //Create return counter
-            int result = 0;
-            //Create poiner to iterate with
-            DualLinkDataNode<T>* iter = rootNode;
-            //Iterate till data is matched
-            while (iter->data != find->data)
-            {
-                //Based on comparisons determine which branch to follow
-                if (find->data > iter->data)
-                {
-                    iter = iter->rightBranch;
-                }
-                else
-                {
-                    iter = iter->leftBranch;
-                }
-                //Increment depth counter
-                result++;
-            }
-            //Return value
-            return result;
-        }
-    }
+    /*
+	*******************************************************************************************************
+											printIndented2
+		Takes in a beginning node position and a default number of tabs to print per the depth of each node
+		The character value is used to determine the direction of the node with respect to the parent
+		The function prints out the data in a post order fashion so the rightmost value is printed first
+		It recurses on itself so it can access the members in a specific order
+	*******************************************************************************************************
+	*/
+	void printIndented(DualLinkDataNode<T>* start, int tabs,char c)
+	{
+		//Validate that the current node is not a null ptr
+		if (start != nullptr)
+		{
+			//Recurse till we reach the rightmost non null node and change character to r so the arrows point in the right direction
+			printIndented(start->rightBranch, tabs + 1,'r');
+			//Print out tabs and Line breaks to signify the depth of each node
+			for (int x = 0; x < tabs; x++)
+			{
+				std::cout << "|\t\t";
+			}
+			//Depending on whether it is a right or left child print the specific arrow
+			if (c == 'l')
+			{
+				std::cout << "^---";
+			}
+			else if (c == 'r')
+			{
+				std::cout << "v---";
+			}
+			//Print out the data in the current node
+			std::cout << start->data << std::endl;
+			//Use Lines to show seperation of levels
+			std::cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+			//Recurse to get through the left branch
+			printIndented(start->leftBranch, tabs + 1,'l');
+		}
+	}
+	/*
+	*******************************************************************************************************
+								callPrintIndentedTree()
+		The function makes the initial call to the printIndented function with acceptable parameters
+		It then provides labeling that can be used to identify the depth of particular nodes in the tree
+	*******************************************************************************************************
+	*/
+	void callPrintIndentedTree()
+	{
+		//Call printIndented with the rootNode and a neutral character to prevent printing of arrows
+		printIndented(rootNode, 0,'n');
+		//Print initial label for root
+		cout << "|Root\t\t";
+		//Iterate based on the depth of the tree to print labels for each level
+		for (int x = 1; x < findDepth(); x++)
+		{
+			//The last item printed out will always be a leaf so it prints out leaf to distinguish it from other branches
+			if (x ==findDepth() - 1)
+			{
+				std::cout << "|Leaf" << "\t";
+			}
+			else
+			{
+				std::cout << "|Branch " << x << "\t";
+			}
+		}
+	}
 
-    ////Untested Indent Print I need to test if I incremented correnctly as well as view the output.
-    //void printIndented(DualLinkDataNode<T>*start)
-    //{
-    //    //Verify not null
-    //    if (start != nullptr)
-    //    {
-    //        //Call function on itself till we get to rightmost branch
-    //        printIndented(start->rightBranch);
-    //        //Print out number of tabs corresponding to depth of the object
-    //        //(May change it so it prints out an arrow if we have time)
-    //        for (int x = 0; x <getHeight(start); x++)
-    //        {
-    //            std::cout << "\t";
-    //        }
-    //        //Print out data (Verify ostream operator in Pokemon class to make sure out puts work)
-    //        std::cout << start->data << std::endl;
-    //        //Call function on left branch till tree is completed
-    //        printIndented(start->leftBranch);
-    //    }
-    //}
-
-    //this function prints the indented tree, the function tracks the depths that the node being printed resides on,
-    //based on a node's depth there will be a certain amount in indentations made.
-    //the right most node will be printed on top, the left most node will be printed on the bottom.
-    //this print functions prints in a horizontal direction.
-    void printIndented2(DualLinkDataNode<T>* start, int tabs)
-    {
-        if (start != nullptr)
-        {
-            printIndented2(start->rightBranch, tabs + 1);
-            for (int x = 0; x < tabs; x++)
-            {
-                std::cout << "\t\t";
-            }
-            std::cout << start->data << std::endl;
-            printIndented2(start->leftBranch, tabs + 1);
-        }
-    }
-    void callPrintIndentedTree()
-    {
-        printIndented2(rootNode, 0);
-    }
-
-
-
-
-
-    //void callPrintIndentedTree()
-    //{
-    //    printIndented(rootNode);
-    //}
 };
 
 #endif
