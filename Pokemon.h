@@ -3,18 +3,23 @@
 
 #include <string>
 #include <fstream>
-
+/*
+The Pokemon class is our data class that represents the ingame characteristics of the individual creature
+It contains primarily getters and setters but has operator overloads as well to allow for ease of data access, creation and output
+*/
 class Pokemon
 {
 private:
-	std::string pokemonName;
-	int serialNumber;
-	std::string elementalType;
-	//std::string type2;
-	int offense;
-	int defense;
+	std::string pokemonName;//Represents the Ingame Name of the Pokemon
+	int serialNumber;//Represents the Pokedex entry of the Pokemon
+	std::string elementalType;//Holds the elemental typing(s) of the Pokemon
+	int offense;//Based on the higher offensive stat of the Pokemon
+	int defense;//Based on the defensive stats of the Pokemon
 public:
 	//Constructors
+	/*
+	The default constructor sets up default values for the Pokemon Objects so there is no conflict between existing Pokemon
+	*/
 	Pokemon() // default constructor
 	{
 		pokemonName = "unknown name";
@@ -23,66 +28,74 @@ public:
 		offense = 0;
 		defense = 0;
 	}
-	Pokemon(std::string name, int idNumber, std::string emelents, int offenseNumber, int defenseNumber)
+	/*
+	The Secondary contructor sets all the values of the pokemon classes member variables
+	*/
+	Pokemon(std::string name, int idNumber, std::string elements, int offenseNumber, int defenseNumber)
 	{
 		pokemonName = name;
 		serialNumber = idNumber;
-		elementalType = emelents;
+		elementalType = elements;
 		offense = offenseNumber;
 		defense = defenseNumber;
 	}
 
 	//getters
+	//Returns pokemon's name
 	std::string getPokemonName()
 	{
 		return pokemonName;
 	}
+	//Returns Pokemon's Dex Number
 	int getSerialNumber()
 	{
 		return serialNumber;
 	}
+	//Returns Pokemon's Elemental Type
 	std::string getElementalType()
 	{
 		return elementalType;
 	}
-	//std::string getType2()
-	//{
-	//	return type2;
-	//}
+	//Returns Pokemon's Offense Stat
 	int getOffenseStat()
 	{
 		return offense;
 	}
+	//Returns Pokemons defense stat
 	int getDefenseStat()
 	{
 		return defense;
 	}
 
 	//setters
+	//Sets the Pokemon's Name variable
 	void setPokemonName(std::string name)
 	{
 		pokemonName = name;
 	}
+	
+	//Sets the Pokemon's Dex Number
 	void setSerialNumber(int idNumber)
 	{
 		serialNumber = idNumber;
 	}
+	
+	//Sets the Pokemon's Elmental Type
 	void setElementType(std::string element)
 	{
 		elementalType = element;
 	}
-	//void setType2(std::string x)
-	//{
-	//	type2 = x;
-	//}
+	//Sets the Pokemon's Offense stat
 	void setOffenseStat(int offenseNumber)
 	{
 		offense = offenseNumber;
 	}
+	//Sets the Pokemon's Defense stat
 	void setDefenseStat(int defenseNumber)
 	{
 		defense = defenseNumber;
 	}
+	//Allows us to set all the Pokemon's information in one swoop
 	void setAll(std::string name, int number, std::string element, int attack, int defend)
 	{
 		pokemonName = name;
@@ -92,48 +105,54 @@ public:
 		defense = defend;
 	}
 	//Overloading >> operator to read in data from file
+	/*
+	The operator overload creates a temporary string and reads it based on how the data file is structured
+	It then allocates the values to the object, converting based on the member variable it needs to store into
+	This can be used to create a whole array or set up multiple nodes in on fell swoop
+	*/
 	friend std::ifstream& operator >> (std::ifstream &file, Pokemon &creature)
 	{
 		std::string tempString;
 		int tempNumber;
 		getline(file, tempString, '|');
-		tempNumber = std::stoi(tempString);
+		tempNumber = std::stoi(tempString);//Conversion to int to match data type
 		creature.setSerialNumber(tempNumber);
 		getline(file, tempString, '|');
 		creature.setPokemonName(tempString);
 		getline(file, tempString, '|');
 		creature.setElementType(tempString);
-		//getline(file, tempStr, '|');
-		//p.setType2(tempStr);
 		getline(file, tempString, '|');
-		creature.setOffenseStat(std::stoi(tempString));
+		creature.setOffenseStat(std::stoi(tempString));//Conversion to int to match data type
 		getline(file, tempString, '\n');
-		creature.setDefenseStat(std::stoi(tempString));
+		creature.setDefenseStat(std::stoi(tempString));//Conversion to int to match data type
 		return file;
 	}
 
-	//  Overload the instream pointer operator
+	//  Overload the instream pointer operator 
+	
+	
 	friend std::ifstream& operator >> (std::ifstream &file, Pokemon *&creature)
 	{
 		std::string tempString;
 		int tempNumber;
 		getline(file, tempString, '|');
-		tempNumber = std::stoi(tempString);
+		tempNumber = std::stoi(tempString);//Conversion to int to match data type
 		creature->setSerialNumber(tempNumber);
 		getline(file, tempString, '|');
 		creature->setPokemonName(tempString);
 		getline(file, tempString, '|');
 		creature->setElementType(tempString);
-		//getline(file, tempStr, '|');
-		//p.setType2(tempStr);
 		getline(file, tempString, '|');
-		creature->setOffenseStat(std::stoi(tempString));
+		creature->setOffenseStat(std::stoi(tempString));//Conversion to int to match data type
 		getline(file, tempString, '\n');
-		creature->setDefenseStat(std::stoi(tempString));
+		creature->setDefenseStat(std::stoi(tempString));//Conversion to int to match data type
 		return file;
 	}
 
 	// overloaded out stream operator 
+	/*
+	This overload allows us to print specific data to the ostream wherever needed.
+	*/
 	friend std::ostream &operator << (std::ostream &outStream, Pokemon &creature)
 	{
 		//std::cout << "(" << creature.serialNumber << ") " << creature.pokemonName << " " << creature.elementalType;
@@ -142,6 +161,9 @@ public:
 	}
 
 	//  Overload the outstream pointer operator
+	/*
+	This accomplishes the same as the previous but allows us to do a print via pointers
+	*/
 	friend std::ostream &operator << (std::ostream &outStream, Pokemon *&creature)
 	{
 		//std::cout << creature->serialNumber << " " << creature->pokemonName << " " << creature->elementalType;
@@ -151,6 +173,9 @@ public:
 
 
 	//  Overloaded multiplication operator
+	/*
+	This overload allows us to manipulate the serial number which is used as a key in the hash table and BST
+	*/
 	int operator*(const Pokemon *&right)
 	{
 		int temp;
@@ -159,6 +184,9 @@ public:
 	}
 
 	// Overloaded <= pointer operation
+	/*
+	This comparison operator allows for indirect comparison of Pokemon objects allowing us to setup the BST 
+	*/
 	bool operator <= (const Pokemon *&rightSide)
 	{
 		bool status;
@@ -178,6 +206,9 @@ public:
 	}
 
 	// Overloaded >= pointer operation
+	/*
+	This comparison operator allows for indirect comparison of Pokemon objects allowing us to setup the BST 
+	*/
 	bool operator >= (const Pokemon *&rightSide)
 	{
 		bool status;
@@ -196,7 +227,9 @@ public:
 		return status;
 	}
 
-	// more overload stuff
+	/*
+	This comparison operator allows for indirect comparison of Pokemon objects allowing us to setup the BST 
+	*/
 	bool operator >= (const Pokemon &rightSide)
 	{
 		bool status;
@@ -234,7 +267,7 @@ public:
 	//	return status;
 	//}
 
-
+	//Overloaded <= operator allowing for comparison of Pokemon serial numbers with integer values
 	bool operator<=(const int &number)
 	{
 		bool status;
@@ -253,7 +286,7 @@ public:
 		return status;
 	}
 
-
+	//Overloaded >= operator allowing for comparison of Pokemon serial numbers with integer values
 	bool operator>=(const int &number)
 	{
 		bool status;
@@ -272,7 +305,7 @@ public:
 		return status;
 	}
 
-	// overloaded > operator
+	// overloaded > operator allowing for comparison of serial numbers withing Pokemon class Objects
 	bool operator > (const int &number)
 	{
 		bool status;
@@ -287,7 +320,7 @@ public:
 		return status;
 	}
 
-	// overloaded > operator for the pokemon pointer
+	// overloaded > operator for the pokemon pointer allowing for indirect Comparison of serial Numbers
 	bool operator > (const Pokemon *&rightSide)
 	{
 		bool status;
@@ -306,7 +339,7 @@ public:
 		return status;
 	}
 
-	// overloaded > operator for the pokemon pointer
+	// overloaded > operator for the pokemon pointer allowing for comparison of Serial Numbers
 	bool operator > (const Pokemon &rightSide)
 	{
 		bool status;
@@ -326,7 +359,9 @@ public:
 	}
 
 
-
+	/*
+	This type conversion allows us to deal with the serialNumber with relative ease
+	*/
 	operator int()
 	{
 		int number;
@@ -373,6 +408,8 @@ public:
 		return status;
 	}
 
+	//Overloaded comparison operator that functions with Pokemon class objects
+	//It compares the serial numbers of two Pokemon returning whether the values are equal or not
 	bool operator==(const Pokemon &rightSide)
 	{
 		bool status;
