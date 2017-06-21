@@ -4,12 +4,12 @@
 #include<iostream>
 
 const int ARRAY_SIZE = 36;  // 36 + 1 is prime
-int totalDataItems = 0; // track the total number of data items
-int bstEffiencyCounter = 0;  // track how many operations it took to insert the data into the tree
-int hashedTableEffiencyCounter = 0;  // track how many colision there are in the hashed table
+int totalDataItems = 0; // track the total number of data items entered in
+int bstEffiencyCounter = 0;  // track how many operations it took to insert the data into the binary tree
+int hashedTableCollisionCounter = 0;  // track how many collision there are in the hashed table
 int linkedListEffiencyCounter = 0;  // track how many operations it took to insert the data into the linked list
 
-
+// get user input, filter out any bad input, and return an <int>
 int getMenuInput(int size)
 {
 	int userInput = 0;
@@ -24,6 +24,7 @@ int getMenuInput(int size)
 	return userInput;
 }
 
+// get user input, filter out any bad input, and return an <int>
 int getIntegerInput()
 {
 	int number;

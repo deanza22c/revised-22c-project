@@ -70,14 +70,14 @@ int main()
 	{
 		// display the menu options and prompt the user for input
 		system("cls");
-		cout << "1: add new Pokemon (data)\n";
-		cout << "2: remove Pokemon (data)\n";
-		cout << "3: search and display a Pokemon (data)\n";
+		cout << "1: add new Pokemon (add data)\n";
+		cout << "2: remove Pokemon (remove data)\n";
+		cout << "3: search and display a Pokemon\n";
 		cout << "4: list data in the hash table\n";
-		cout << "5: list data sorted by the key attribute (inorder traverse)\n";
+		cout << "5: list data with sorting (key attribute, secondary attribute, tertiary attribute)\n";
 		cout << "6: print indented binary search tree\n";
 		cout << "7: display effiency numbers\n";
-		cout << "8: team choice (scanner)\n";
+		cout << "8: scan for pokemon (team choice option)\n";
 		cout << "9: exit program\n";
 		cout << endl;
 		cout << "Enter the choice: ";
@@ -96,6 +96,14 @@ int main()
 			getline(cin, name);
 			cout << "enter in pokemon's pokedex number: ";
 			creatureIndexNumber = getIntegerInput();
+
+			// if the number is less than 1, re-prompt for input
+			while (creatureIndexNumber < 1)
+			{
+				cout << "the pokedex number must be greater than zero, enter in a new number: ";
+				creatureIndexNumber = getIntegerInput();
+			}
+
 			cout << "enter in pokemon's elements: ";
 			getline(cin, elements);
 			cout << "enter in pokemon's offense stat: ";
@@ -104,46 +112,51 @@ int main()
 			defense = getIntegerInput();
 			cout << "\npress <Enter> to return to main menu...";
 			cin.get();
+
+			// now create a new pokemon instance and update the data structures
 			Pokemon *addThisPokemon = nullptr;
 			addThisPokemon = new Pokemon(name, creatureIndexNumber, elements, offense, defense);
 			pokemonOffenseLinkedList.insertNode(addThisPokemon);
 			pokemonDefenseLinkedList.insertNode(addThisPokemon);
 			pokemonBST.addValue(addThisPokemon);
 			pokemonHashedTable.add(addThisPokemon);
-			totalDataItems++;
-			if (!fileIsOpen)
+			totalDataItems++;  // increment the data counter
+
+			if (!fileIsOpen) // check to see if the file is all ready open
 			{
-				// check to see if the file is all ready open
+
 				writeToDataRecordsFile.open("PokeStats.txt", ios::app | ios::ate);
 				fileIsOpen = true;
 			}
+
+			// write the new item to PokeStats.txt file
 			writeToDataRecordsFile << endl << creatureIndexNumber << "|" << name << "|" << elements << "|" << offense << "|" << defense;
 			break;
-		}
+		}  // end of add new data option
+
 		case 2:
 		{
 			// call to remove data function
-			// both the hash table and binary search tree need remove functions
-			// use this case to call those remove functions
+			// prompt the user for the pokedex number of the creature to remove
+			// after the number is validated, remove the item from the data structures
 
 			system("cls");
 			cout << "this is the remove data choice\n";
 			cout << "enter the pokedex number of the pokemon you wish to remove: ";
 			int removeNumber = getIntegerInput();
 
-			pokemonOffenseLinkedList.deleteThisSerialNumber(removeNumber);
-			pokemonDefenseLinkedList.deleteThisSerialNumber(removeNumber);
-			// create a new pokemon instance and set its serial number with the input value
-			//Pokemon *removeThisPokemon = nullptr;
-			//removeThisPokemon = new Pokemon();
+			// delete the item from the linked lists
+			pokemonOffenseLinkedList.deleteThisSerialNumber(removeNumber); // remove the item from the offense linked list
+			pokemonDefenseLinkedList.deleteThisSerialNumber(removeNumber); // remove the item from the defense linked list
+
+			tempPokemon = new Pokemon();
 			tempPokemon->setSerialNumber(removeNumber);
 
-			// delete the item from the data structures
+			// delete the item from the binary search tree and hashed table
 			bool status = pokemonBST.deleteValue(tempPokemon); // remove the item from the binary search tree
 			bool status2 = pokemonHashedTable.removebyData(tempPokemon); // remove the item from the hashed table
 
-
-
+			// print out the results of the search
 			if (!status && !status2)
 			{
 				cout << "pokemon NOT found\n";
@@ -155,16 +168,17 @@ int main()
 
 			cout << "\npress <Enter> to return to main menu...";
 			cin.get();
-			//delete removeThisPokemon;
+			delete tempPokemon;
 			break;
-		}
+		}  // end of remove data option
+
 		case 3:
 		{
 			// call to find and display data function
 			// this function will use the binary search tree to find and display the creature based on the number entered
 
 			system("cls");
-			cout << "\n  enter in creature number to search for: ";
+			cout << "\n enter in creature number to search for: ";
 			creatureIndexNumber = getIntegerInput();
 
 			Pokemon *displayThisPokemon = nullptr;
@@ -176,8 +190,9 @@ int main()
 			if (status)
 			{
 				cout << "pokedex number: " << creatureIndexNumber << " has been found\n";
-				cout << "displaying the information of the pokemon:\n";
 				cout << endl;
+				cout << "displaying the information of the pokemon:\n";
+				cout << "-------------------------------------------------\n";
 				cout << setw(30) << left << "pokemon name: " << displayThisPokemon->getPokemonName() << endl;
 				cout << setw(30) << left << "pokemon elemental type(s): " << displayThisPokemon->getElementalType() << endl;
 				cout << setw(30) << left << "pokemon offense stat: " << displayThisPokemon->getOffenseStat() << endl;
@@ -198,7 +213,7 @@ int main()
 			// list all the data stored in the hashed table based array
 
 			system("cls");
-			cout << "this is the list data in hash table array:\n\n";
+			cout << "this is the list of data stored in the hash table array:\n\n";
 			pokemonHashedTable.hashDisplayAll();
 			cout << "\npress <Enter> to return to main menu...";
 			cin.get();
@@ -209,16 +224,31 @@ int main()
 			// call to list data in key sequence (sorted)
 			// list all data using the creature number as the sort method
 
+			// display list using serial key as the sort method
 			system("cls");
-			cout << "this is the list data in key sequence (inorder traverse) choice\n";
+			cout << "this is the list data sorted by the key attribute using inorder traverse\n";
+			cout << "------------------------\n";
 			pokemonBST.printBreadthFirstTraverse();
-			cout << "\npress <Enter> to return to main menu...";
+			cout << endl;
+			cout << "press <Enter> to sort by offense stat...";
 			cin.get();
+
+			// display list using offense number as the sort method
 			system("cls");
+			cout << "this is the list data sorted by the offense number\n";
+			cout << endl;
 			pokemonOffenseLinkedList.displayList();
+			cout << endl;
+			cout << "press <Enter> to sort by defense stat...";
 			cin.get();
+
+			// display list using defense numbers as the sort method
 			system("cls");
+			cout << "this is the list data sorted by the defense number\n";
+			cout << endl;
 			pokemonDefenseLinkedList.displayList();
+			cout << endl;
+			cout << "\npress <Enter> to return to main menu...";
 			cin.get();
 			break;
 		}
@@ -242,12 +272,13 @@ int main()
 
 			int hashedTableFillRate = ((static_cast<double>(pokemonHashedTable.getItemCount()) / static_cast<double>(pokemonHashedTable.getLength())) * 100);
 			int bstInsertEffiency = bstEffiencyCounter / totalDataItems;
-			int linkedListEffiency = linkedListEffiencyCounter / pokemonHashedTable.getLinkedListCount();
+			int linkedListEffiency = linkedListEffiencyCounter / (totalDataItems * 2);
 			system("cls");
-			cout << "this is the effiency of the three data structures:\n\n";
-			cout << "Hashed Table fill rate is: " << hashedTableFillRate << "%\n";
+			cout << "this is the effiency of the three data structures:\n";
+			cout << "--------------------------------------------------\n\n";
+			cout << "Hashed Table fill rate is: " << hashedTableFillRate << "% with " << hashedTableCollisionCounter << " collision(s)\n";
 			cout << "Binary Search Tree performed " << bstEffiencyCounter << " operations to insert " << totalDataItems << " items, " << bstInsertEffiency << " per item average.\n";
-			cout << "Linked List performed " << linkedListEffiencyCounter << " operations to insert " << pokemonHashedTable.getLinkedListCount() << " items, " << linkedListEffiency << " per item average.\n";
+			cout << "Linked List performed " << static_cast<int>((linkedListEffiencyCounter / 2)) << " operations to insert " << totalDataItems << " items, " << linkedListEffiency << " per item average.\n";
 			cout << "\npress <Enter> to return to main menu...";
 			cin.get();
 			break;

@@ -1,19 +1,20 @@
-// A linked list that sorts the data by offense or defense number
-// Performs all the basics of a linked list
+// A linked list that inserts the data by offense or defense number
+// Performs add node, delete node, display items in the list and get list size
+// other linked list functions were removed to make the file easier to read
 
 #ifndef OFFENSEDEFENSELINKEDLIST_H
 #define OFFENSEDEFENSELINKEDLIST_H
 #include <iostream>
 #include"Pokemon.h"
-//#include<iomanip>
+
 
 
 //*********************************************
-// The ListNode class creates a type used to *
-// store a node of the linked list. *
+// The node for the Offense Defense Linked List
+// contains two pointers, a pokemon class pointer
+// and a node class pointer to store the next node's address
 //*********************************************
 
-//template <class T>
 class OffenseDefenseNode
 {
 private:
@@ -52,38 +53,20 @@ public:
 	friend class OffenseDefenseList;
 };
 
+
+
+
 //*********************************************
-// OffenseDefenseList class *
+// OffenseDefenseList class
+// A linked list that inserts the data based on the offense or defense number of the pokemon
 //*********************************************
 
-//template <class T>
 class OffenseDefenseList
 {
 private:
 	OffenseDefenseNode* head;  // pointer to the first node
 	int listCount = 0;   // another way of tracking the list's size
-	bool sortedByOffenseNumber;
-
-protected:
-	//OffenseDefenseNode *push_front(Pokemon* newValue)
-	//{
-	//	// creates a new node, sets nodes value as the sent value
-	//	// sets new node as the first item in the list, and updates head and next node pointers
-
-	//	// insert a node at the front of the list
-	//	OffenseDefenseNode *newNode; // To point to a new node
-
-	//								 // Allocate a new node and store newValue there.
-	//	newNode = new OffenseDefenseNode(newValue);
-
-	//	// point newNode->next to the old first node and make newNode the first node in the list
-	//	newNode->next = head;
-	//	head = newNode;
-
-	//	// update the list size
-	//	listCount++;
-	//	return newNode;
-	//}
+	bool sortedByOffenseNumber;  // flag for the sort method
 
 public:
 	// Constructor
@@ -108,19 +91,33 @@ public:
 	}
 
 	// Destructor
-	~OffenseDefenseList();
-
-	// Linked list operations
-
-	void emptyTheList()
+	//**************************************************
+	// This function deletes every node in the list. *
+	//**************************************************
+	~OffenseDefenseList()
 	{
-		int size = this->getListSize();
-		for (int count = 0; count < size; count++)
+		OffenseDefenseNode *traversalNodePtr; // To traverse the list
+		OffenseDefenseNode *nextNode; // To point to the next node
+
+		// Position nodePtr at the head of the list.
+		traversalNodePtr = head;
+
+		// While nodePtr is not at the end of the list...
+		while (traversalNodePtr != nullptr)
 		{
-			//this->deleteNode(head->pokemonCreature);
+			// Save a pointer to the next node.
+			nextNode = traversalNodePtr->next;
+
+			// Delete the current node.
+			delete traversalNodePtr;
+
+			// Position nodePtr at the next node.
+			traversalNodePtr = nextNode;
 		}
 	}
 
+
+	// Linked list operations
 
 	//**************************************************
 	// insert the pokemon based on the offense or defense value of the pokemon
@@ -139,6 +136,7 @@ public:
 		{
 			head = newNode;
 			newNode->next = nullptr;
+			linkedListEffiencyCounter++;
 		}
 		else // Otherwise, insert newNode.
 		{
@@ -152,14 +150,13 @@ public:
 				{
 					previousNode = nodePtr;
 					nodePtr = nodePtr->next;
+					linkedListEffiencyCounter++;
 				}
 
 				// If the new node is to be the 1st in the list,
 				// insert it before all other nodes.
 				if (previousNode == nullptr)
 				{
-					//newNode->next = head;
-					//head = newNode;
 					head = newNode;
 					newNode->next = nodePtr;
 				}
@@ -178,6 +175,7 @@ public:
 				{
 					previousNode = nodePtr;
 					nodePtr = nodePtr->next;
+					linkedListEffiencyCounter++;
 				}
 
 				// If the new node is to be the 1st in the list,
@@ -198,6 +196,7 @@ public:
 		listCount++;
 	}
 
+
 	//******************************************************
 	// The deleteNode function searches for a node *
 	// with searchValue as its value. The node, if found, *
@@ -217,10 +216,9 @@ public:
 
 		else
 		{
-			//OffenseDefenseNode* currentNode = nullptr; // To traverse the list
 			OffenseDefenseNode* previousNode = nullptr; // To point to the previous node
 
-			// Determine if the first node is the one.
+			// check if the first node has the desired value
 			if (head->pokemonCreature->getSerialNumber() == searchValue)
 			{
 				if (head->next == nullptr)
@@ -234,6 +232,8 @@ public:
 					delete currentNode;
 				}
 			}
+
+			// if the first node does not contain the value, search the rest of the list
 			else
 			{
 				// Skip all nodes whose value member is not equal to searchValue.
@@ -260,7 +260,6 @@ public:
 	}
 
 
-
 	//***************************************************
 	// displayList shows the value stored in each node *
 	// of the linked list pointed to by head. *
@@ -272,18 +271,22 @@ public:
 		// Position nodePtr at the head of the list.
 		nodePtr = head;
 
-		// While nodePtr points to a node, traverse the list.
+		// check if the list has items before printing out the top line
 		if (head != nullptr)
 		{
 			if (sortedByOffenseNumber)
 			{
 				std::cout << std::setw(20) << std::left << "name" << std::setw(15) << "offense #" << std::setw(15) << "defense #" << std::setw(15) << "pokedex #" << std::endl;
+				std::cout << "-----------------------------------------------------------" << std::endl;
 			}
 			else
 			{
 				std::cout << std::setw(20) << std::left << "name" << std::setw(15) << "defense #" << std::setw(15) << "offense #" << std::setw(15) << "pokedex #" << std::endl;
+				std::cout << "-----------------------------------------------------------" << std::endl;
 			}
 		}
+
+		// loop through the list printing out each item
 		while (nodePtr)
 		{
 			if (sortedByOffenseNumber)
@@ -303,58 +306,6 @@ public:
 		}
 	}
 
-	//int searchNodes(Pokemon* searchValue)
-	//{
-	//	// search the nodes for the value sent
-	//	// if the value is found, return the position and maybe cout the value
-	//	// if the value was not found, return -1, simalar to a binary search
-
-	//	int listLocation = 0;
-	//	OffenseDefenseNode *nodePtr; // To traverse the list
-
-	//								 // If the list is empty, return -1
-	//	if (!head)
-	//		return -1;
-
-	//	// if the first node is the value, return its index, 1
-	//	//if (sortedByOffenseNumber)
-	//	//{
-	//	if (head->pokemonCreature->getOffenseStat() == searchValue->getOffenseStat())
-	//	{
-	//		return 1;
-	//	}
-	//	else
-	//	{
-	//		// Initialize nodePtr to head of list and increment the location counter
-	//		nodePtr = head;
-	//		listLocation++;
-
-	//		// Skip all nodes whose value member is not equal to searchValue.
-	//		while (nodePtr != nullptr && nodePtr->pokemonCreature->getOffenseStat() != searchValue->getOffenseStat())
-	//		{
-	//			nodePtr = nodePtr->next;
-	//			listLocation++;
-	//		}
-
-	//		//  if the value was not found, and the list is at the end, return -1
-	//		if (nodePtr == nullptr)
-	//		{
-	//			return -1;
-	//		}
-
-	//		// else, return the index of where the value was found
-	//		else
-	//		{
-	//			return listLocation;
-	//		}
-	//	}
-	//	//}
-	//	//else
-	//	//{
-	//	//
-	//	//}
-	//}
-
 	int getListSize()
 	{
 		// return the number of items in the list
@@ -363,31 +314,5 @@ public:
 
 };
 
-//**************************************************
-// Destructor *
-// This function deletes every node in the list. *
-//**************************************************
-//
 
-OffenseDefenseList::~OffenseDefenseList()
-{
-	OffenseDefenseNode *traversalNodePtr; // To traverse the list
-	OffenseDefenseNode *nextNode; // To point to the next node
-
-								  // Position nodePtr at the head of the list.
-	traversalNodePtr = head;
-
-	// While nodePtr is not at the end of the list...
-	while (traversalNodePtr != nullptr)
-	{
-		// Save a pointer to the next node.
-		nextNode = traversalNodePtr->next;
-
-		// Delete the current node.
-		delete traversalNodePtr;
-
-		// Position nodePtr at the next node.
-		traversalNodePtr = nextNode;
-	}
-}
 #endif

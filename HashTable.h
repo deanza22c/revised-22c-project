@@ -166,6 +166,7 @@ private:
 		Node<Pokemon*>* temp = new Node<Pokemon*>(data);
 		linkedListOverflow.addAnywhere(0, temp);
 		linkedListItemCount++;
+		hashedTableCollisionCounter++;
 	}
 
 	/*This function takes a pokemon pointer and searches through the link-list for it.
@@ -232,10 +233,10 @@ public:
 	void hashDisplay(int index)
 	{
 		if (pokemonPtrArray[index] != nullptr)
-			std::cout << "[" << index << "] " << pokemonPtrArray[index]->getPokemonName() << std::endl;
+			std::cout << "array index[" << index << "] = " << pokemonPtrArray[index]->getPokemonName() << std::endl;
 		else
 		{
-			std::cout << "[" << index << "] <empty>" << std::endl;
+			std::cout << "array index[" << index << "] = <empty>" << std::endl;
 		}
 	}
 
@@ -288,7 +289,7 @@ public:
 		int hashIndex; //basically holds index after hash function
 		hashIndex = hash(data); // Call hash function (see hash)
 
-								// if the hashIndex number is greater than the size of the array, add the item to the linked list
+		// if the hashIndex number is greater than the size of the array, add the item to the linked list
 		if (hashIndex > arrayLength)
 		{
 			collisionLinkList(data);
@@ -320,7 +321,9 @@ public:
 		//This is for both Linked List and Linear Resolution
 		//if (((double)itemCount / (double)arrayLength) >= 0.75) reHashFillPercent
 		if (((double)itemCount / (double)arrayLength) >= (static_cast<double>(reHashFillPercent / 100.0)))
+		{
 			rehash();
+		}
 	}
 
 	/*This function removes the content of an index in the hashtable.

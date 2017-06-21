@@ -140,7 +140,7 @@ public:
 				prevPtr = curPtr;
 				curPtr = curPtr->getPtrFront();
 				i++;
-				linkedListEffiencyCounter++;
+				//linkedListEffiencyCounter++;
 			}
 			newNode->setPtrFront(curPtr);
 			if (prevPtr == nullptr)
@@ -148,7 +148,7 @@ public:
 			else
 				prevPtr->setPtrFront(newNode);
 			itemCount++;
-			linkedListEffiencyCounter++;
+			//linkedListEffiencyCounter++;
 			isSuccess = true;
 			return isSuccess;
 		}

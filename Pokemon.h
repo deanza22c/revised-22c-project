@@ -136,7 +136,8 @@ public:
 	// overloaded out stream operator 
 	friend std::ostream &operator << (std::ostream &outStream, Pokemon &creature)
 	{
-		std::cout << creature.serialNumber << " " << creature.pokemonName << " " << creature.elementalType;
+		//std::cout << "(" << creature.serialNumber << ") " << creature.pokemonName << " " << creature.elementalType;
+		std::cout << creature.pokemonName;
 		return outStream;
 	}
 
@@ -144,7 +145,7 @@ public:
 	friend std::ostream &operator << (std::ostream &outStream, Pokemon *&creature)
 	{
 		//std::cout << creature->serialNumber << " " << creature->pokemonName << " " << creature->elementalType;
-		std::cout << "[" << creature->serialNumber << "]" << " " << creature->pokemonName;
+		std::cout << creature->pokemonName << " (" << creature->serialNumber << ")";
 		return outStream;
 	}
 
@@ -385,7 +386,6 @@ public:
 		}
 		return status;
 	}
-
 
 
 };
